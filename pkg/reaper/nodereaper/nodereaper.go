@@ -161,6 +161,14 @@ func (ctx *ReaperContext) validateArguments(args *Args) error {
 		ctx.ReapUnjoinedValue = args.ReapUnjoinedValue
 	}
 
+	if args.DrainTimeoutSeconds < 600 {
+		err := fmt.Errorf("--drain-timeout must be set to number greater than or equal to 600")
+		log.Errorln(err)
+		return err
+	}
+
+	ctx.DrainTimeoutSeconds = args.DrainTimeoutSeconds
+
 	log.Infof("Reap Unknown = %t, threshold = %v minutes", ctx.ReapUnknown, ctx.TimeToReap)
 	log.Infof("Reap Unready = %t, threshold = %v minutes", ctx.ReapUnready, ctx.TimeToReap)
 	log.Infof("Reap Ghost = %t, threshold = immediate", ctx.ReapGhost)
